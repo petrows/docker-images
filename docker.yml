@@ -6,5 +6,7 @@ repo:
 images:
   - name: podman
     description: "Static podman image, allows to build other images inside container"
+    args:
+      PODMAN_VERSION: 5.7.0
     tags:
       - 5.7.0
