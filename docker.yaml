@@ -1,0 +1,10 @@
+# Reciepe for docker images
+
+repo:
+  prefix: ghcr.io/petrows/docker-images
+
+images:
+  - name: podman
+    description: "Static podman image, allows to build other images inside container"
+    tags:
+      - 5.7.0
