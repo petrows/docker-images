@@ -1,5 +1,5 @@
 ---
-on: # yamllint disable-line rule:truthy
+on:  # yamllint disable-line rule:truthy
   - pull_request
 
 name: Python Lint
@@ -7,14 +7,11 @@ jobs:
   python-lint:
     name: Run Python Lint
     runs-on: self-hosted
-    strategy:
-      matrix:
-        #linter: [flake8, pylint, ruff, mypy, pytype, pyright, fixit, pyre]
-        linter: [flake8, pylint]
+    container:
+      image: ghcr.io/petrows/github-linters:v1
+      options: -u 2025:2025
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - uses: advanced-security/python-lint-code-scanning-action@v1
-        with:
-          linter: ${{ matrix.linter }}
+      - name: python-lint
+        run: |
+          find . -name '*.py' -printf '%P\n' | xargs pylint --output-format github
