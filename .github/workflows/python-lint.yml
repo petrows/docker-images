@@ -11,6 +11,9 @@ jobs:
         #linter: [flake8, pylint, ruff, mypy, pytype, pyright, fixit, pyre]
         linter: [flake8, pylint]
     steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: advanced-security/python-lint-code-scanning-action@v1
         with:
           linter: ${{ matrix.linter }}

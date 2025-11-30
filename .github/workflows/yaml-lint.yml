@@ -10,9 +10,14 @@ jobs:
       image: ghcr.io/petrows/github-linters:v1
       options: -u 2025:2025
     steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: yaml-lint
         # The `--format github` detected automatically
         # See: https://yamllint.readthedocs.io/en/stable/integration.html
         run: |
-          # echo "::warning file=.github/workflows/python-lint.yml,line=1::Missing semicolon"
+          echo "::group::./.github/workflows/python-lint.yml"
+          echo "::warning file=./.github/workflows/python-lint.yml,line=1::Missing semicolon"
+          echo "::endgroup::"
           yamllint --format github .
