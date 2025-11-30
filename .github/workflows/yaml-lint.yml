@@ -6,11 +6,9 @@ jobs:
     name: Run YAML Lint
     runs-on: self-hosted
     container:
-      image: cytopia/yamllint:1
+      image: ghcr.io/petrows/docker-images/linters:v1
       options: -u 2025:2025
     steps:
-      - uses: actions/checkout@v3
       - name: yaml-lint
-        uses: ibiqlik/action-yamllint@v3
-        with:
-          file_or_dir: '**/*.yml **/*.yaml'
+        run: yamllint --format github .
+
