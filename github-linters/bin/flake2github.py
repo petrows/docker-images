@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+"""
+Convert flake8 output to GitHub Actions annotations.
+Reads flake8 output from stdin and writes GitHub Actions annotations to stdout.
+"""
 import sys
 import re
 
@@ -9,6 +13,9 @@ FLAKE8_PATTERN = re.compile(
 )
 
 def main() -> int:
+    """
+    Entry point function.
+    """
     had_errors = False
 
     for raw_line in sys.stdin:
