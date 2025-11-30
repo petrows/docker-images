@@ -42,7 +42,9 @@ jobs:
     container:
       image: ghcr.io/petrows/podman:5.7.0
       options: -u 0 --privileged
-    needs: docker-build
+    needs:
+      - docker-detect
+      - docker-build
     strategy:
       matrix:
         image: ${{ fromJSON(needs.docker-detect.outputs.images) }}
