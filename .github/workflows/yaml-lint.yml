@@ -1,4 +1,5 @@
-on: pull_request
+on:
+  - push
 
 name: YAML Lint
 jobs:
@@ -6,9 +7,12 @@ jobs:
     name: Run YAML Lint
     runs-on: self-hosted
     container:
-      image: ghcr.io/petrows/docker-images/linters:v1
+      image: ghcr.io/petrows/github-linters:v1
       options: -u 2025:2025
     steps:
       - name: yaml-lint
-        run: yamllint --format github .
-
+        # The `--format github` detected automatically
+        # See: https://yamllint.readthedocs.io/en/stable/integration.html
+        run: |
+          # echo "::warning file=.github/workflows/python-lint.yml,line=1::Missing semicolon"
+          yamllint --format github .

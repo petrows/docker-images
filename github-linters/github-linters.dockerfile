@@ -2,6 +2,7 @@
 FROM ubuntu:24.04
 
 LABEL org.opencontainers.image.source=https://github.com/petrows/docker-images
+LABEL org.opencontainers.image.description="Set of generic linters for common GitHub tasks"
 
 RUN apt-get update && apt-get install -qy --no-install-recommends \
     bash \
