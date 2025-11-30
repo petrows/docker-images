@@ -1,0 +1,23 @@
+---
+on:
+  - push
+
+name: Docker build
+jobs:
+  docker-build:
+    name: Detect docker images to build
+    runs-on: self-hosted
+    container:
+      image: ghcr.io/petrows/github-linters:v3
+      options: -u 2025:2025
+    steps:
+      - uses: actions/checkout@v4
+      - name: Detect new tags
+        run: |
+          ./bin/build_docker.py --detect-tags
+      - name: Build new tags
+        run: |
+          ./bin/build_docker.py --build
+      - name: Push new tags
+        run: |
+          ./bin/build_docker.py --push
