@@ -12,6 +12,7 @@ FLAKE8_PATTERN = re.compile(
     r"(?P<file>.*?):(?P<line>\d+):(?P<col>\d+):\s(?P<code>\w\d+)\s(?P<msg>.+)"
 )
 
+
 def main() -> int:
     """
     Entry point function.
@@ -41,8 +42,9 @@ def main() -> int:
         # (при желании можно поменять логику)
         level = "warning"
 
-        # Экранирование спецсимволов для GA
-        message = message.replace("%", "%25").replace("\n", "%0A").replace("\r", "%0D")
+        # Escape special characters for GitHub Actions
+        for old, new in [("%", "%25"), ("\n", "%0A"), ("\r", "%0D")]:
+            message = message.replace(old, new)
 
         print(
             f"::{level} "
