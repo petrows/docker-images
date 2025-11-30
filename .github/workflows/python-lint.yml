@@ -1,14 +1,20 @@
-on: pull_request
+---
+on:
+  - push
 
 name: Python Lint
 jobs:
   python-lint:
     name: Run Python Lint
     runs-on: self-hosted
-    strategy:
-      matrix:
-        linter: [flake8, pylint, ruff, mypy, pytype, pyright, fixit, pyre]
+    container:
+      image: ghcr.io/petrows/github-linters:v3
+      options: -u 2025:2025
     steps:
-      - uses: advanced-security/python-lint-code-scanning-action@v1
-        with:
-          linter: ${{ matrix.linter }}
+      - uses: actions/checkout@v4
+      - name: python-lint
+        run: |
+          find . -name '*.py' -printf '%P\n' | xargs pylint --output-format github
+      - name: python-flake8
+        run: |
+          find . -name '*.py' -printf '%P\n' | xargs flake8 | flake2github.py

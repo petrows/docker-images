@@ -1,0 +1,19 @@
+---
+on:
+  - push
+
+name: YAML Lint
+jobs:
+  yaml-lint:
+    name: Run YAML Lint
+    runs-on: self-hosted
+    container:
+      image: ghcr.io/petrows/github-linters:v3
+      options: -u 2025:2025
+    steps:
+      - uses: actions/checkout@v4
+      - name: yaml-lint
+        # The `--format github` detected automatically
+        # See: https://yamllint.readthedocs.io/en/stable/integration.html
+        run: |
+          find . -name '*.yml' -printf '%P\n' | xargs yamllint --format github
