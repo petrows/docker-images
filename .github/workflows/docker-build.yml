@@ -24,6 +24,8 @@ jobs:
     container:
       image: ghcr.io/petrows/podman:5.7.0
       options: -u 0 --privileged
+      volumes:
+        - /tmp/podman-storage:/var/lib/containers/storage
     needs: docker-detect
     strategy:
       matrix:
@@ -42,6 +44,8 @@ jobs:
     container:
       image: ghcr.io/petrows/podman:5.7.0
       options: -u 0 --privileged
+      volumes:
+        - /tmp/podman-storage:/var/lib/containers/storage
     needs:
       - docker-detect
       - docker-build
@@ -53,3 +57,6 @@ jobs:
       - name: Deploy ${{ matrix.image }}
         run: |
           echo "Deploy: ${{ matrix.image }}"
+          docker login ghcr.io -u petrows -p ${{ secrets.DOCKER_TOKEN }}
+          cd github-linters
+          docker build --progress plain --network host -t ${{ matrix.image }} --cache-to ghcr.io/petrows/docker-images/cache --cache-from ghcr.io/petrows/docker-images/cache -f github-linters.dockerfile .
