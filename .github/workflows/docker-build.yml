@@ -7,11 +7,11 @@ jobs:
   docker-detect:
     name: Detect docker images to build
     runs-on: self-hosted
+    container:
+      image: ghcr.io/petrows/podman:5.7.0
+      options: -u 0 --privileged
     outputs:
       images: ${{ steps.detect.outputs.images }}
-    container:
-      image: ghcr.io/petrows/github-linters:v3
-      options: -u 2025:2025
     steps:
       - uses: actions/checkout@v4
       - name: Detect new tags
@@ -19,7 +19,7 @@ jobs:
         run: |
           ./bin/build_docker.py --detect-tags >> "$GITHUB_OUTPUT"
   docker-build:
-    name: Build docker images
+    name: Build
     runs-on: self-hosted
     container:
       image: ghcr.io/petrows/podman:5.7.0
@@ -30,20 +30,24 @@ jobs:
         image: ${{ fromJSON(needs.docker-detect.outputs.images) }}
     steps:
       - uses: actions/checkout@v4
-      - name: Build docker images
+      - name: Build ${{ matrix.image }}
         run: |
           docker login ghcr.io -u petrows -p ${{ secrets.DOCKER_TOKEN }}
           cd github-linters
           docker build --progress plain --network host -t ${{ matrix.image }} --cache-to ghcr.io/petrows/docker-images/cache --cache-from ghcr.io/petrows/docker-images/cache -f github-linters.dockerfile .
-  # docker-push:
-  #   name: Push docker images
-  #   runs-on: self-hosted
-  #   container:
-  #     image: ghcr.io/petrows/podman
-  #     options: -u 0 --privileged
-  #   needs: docker-detect
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - name: Build docker images
-  #       run: |
-  #         ./bin/build_docker.py --build
+  docker-deploy:
+    name: Deploy
+    if: success() && github.ref == 'refs/heads/master'
+    runs-on: self-hosted
+    container:
+      image: ghcr.io/petrows/podman:5.7.0
+      options: -u 0 --privileged
+    needs: docker-build
+    strategy:
+      matrix:
+        image: ${{ fromJSON(needs.docker-detect.outputs.images) }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy ${{ matrix.image }}
+        run: |
+          echo "Deploy: ${{ matrix.image }}"
