@@ -17,7 +17,4 @@ jobs:
         # The `--format github` detected automatically
         # See: https://yamllint.readthedocs.io/en/stable/integration.html
         run: |
-          echo "::group::.github/workflows/python-lint.yml"
-          echo "::warning file=.github/workflows/python-lint.yml,line=1::Missing semicolon"
-          echo "::endgroup::"
-          yamllint --format github .
+          find . -name '*.yml' -printf '%P\n' | xargs yamllint --format github
