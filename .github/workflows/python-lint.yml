@@ -1,6 +1,6 @@
 ---
 on:
-  - pull_request
+  - push
 
 name: Python Lint
 jobs:
@@ -8,10 +8,13 @@ jobs:
     name: Run Python Lint
     runs-on: self-hosted
     container:
-      image: ghcr.io/petrows/github-linters:v1
+      image: ghcr.io/petrows/github-linters:v2
       options: -u 2025:2025
     steps:
       - uses: actions/checkout@v4
       - name: python-lint
         run: |
           find . -name '*.py' -printf '%P\n' | xargs pylint --output-format github
+      - name: python-flake8
+        run: |
+          find . -name '*.py' -printf '%P\n' | xargs flake8 | flake2github.py

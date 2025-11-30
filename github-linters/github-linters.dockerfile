@@ -21,11 +21,16 @@ RUN apt-get update && apt-get install -qy --no-install-recommends \
 RUN python3 -m venv /opt/venv
 ENV PATH="/opt/venv/bin:/opt/bin:$PATH"
 
+# Copy working requirements reciepes
 COPY requirements.* /opt/venv/
-COPY bin /opt/
 
-# Linters for Python
+# Linters for Python and other software
 RUN pip install --upgrade pip \
     && pip install --no-cache-dir -r /opt/venv/requirements.txt
 
+# Display current installed packages
 RUN pip freeze
+
+# Copy our scripts
+COPY bin /opt/bin
+RUN chmod +x /opt/bin/*
