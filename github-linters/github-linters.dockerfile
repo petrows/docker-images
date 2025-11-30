@@ -1,5 +1,5 @@
 # Common image for GitHub linters
-FROM ubuntu:24.04
+FROM docker.io/library/ubuntu:24.04
 
 LABEL org.opencontainers.image.source=https://github.com/petrows/docker-images
 LABEL org.opencontainers.image.description="Set of generic linters for common GitHub tasks"
