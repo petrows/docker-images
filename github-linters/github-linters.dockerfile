@@ -19,9 +19,10 @@ RUN apt-get update && apt-get install -qy --no-install-recommends \
 
 # Activate venv
 RUN python3 -m venv /opt/venv
-ENV PATH="/opt/venv/bin:$PATH"
+ENV PATH="/opt/venv/bin:/opt/bin:$PATH"
 
 COPY requirements.* /opt/venv/
+COPY bin /opt/
 
 # Linters for Python
 RUN pip install --upgrade pip \
