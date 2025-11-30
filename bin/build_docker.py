@@ -23,8 +23,11 @@ def main():
         help="Detect new tags for Docker images and print list.",
     )
     args = argparser.parse_args()
-    config_path = args.config
-    print(f"Using configuration file: {config_path}")
+    # config_path = args.config
+    # print(f"Using configuration file: {config_path}")
+
+    if args.detect_tags:
+        detect_tags()
 
 
 def read_config():
@@ -32,6 +35,12 @@ def read_config():
     Reads configuration for building Docker images.
     """
     pass
+
+def detect_tags():
+    """
+    Detects new tags for Docker images.
+    """
+    print('images=["ghcr.io/petrows/github-linters:v3-test"]')
 
 
 if __name__ == "__main__":
