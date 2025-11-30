@@ -1,3 +1,4 @@
+---
 # Reciepe for docker images
 
 repo:
@@ -5,7 +6,7 @@ repo:
 
 images:
   - name: podman
-    description: "Static podman image, allows to build other images inside container"
+    description: "Static podman image, allows to build other images"
     args:
       PODMAN_VERSION: 5.7.0
     tags:
