@@ -120,6 +120,7 @@ def image_full_name(image: str, tag: str) -> str:
     prefix = config['repo']['prefix']
     return f"{prefix}/{image}:{tag}"
 
+
 def detect_images_tags(name: str):
     """
     Detects new image tags for build.
@@ -153,6 +154,10 @@ def detect_images():
         tags = detect_images_tags(name)
         if tags:
             images_detected.append(name)
+
+    if not images_detected:
+        print("::error::No new images detected for build.")
+        sys.exit(1)
 
     print(f'images={images_detected}')
 
