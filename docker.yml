@@ -2,13 +2,16 @@
 # Reciepe for docker images
 
 repo:
-  prefix: ghcr.io/petrows/docker-images
+  prefix: ghcr.io/petrows
+  cache: ghcr.io/petrows/docker-images/cache
+  owner: petrows/docker-images
 
 images:
   - name: github-linters
     description: "Static github-linters image, contains various linters for GitHub Actions"
     tags:
       - v4
+      - v3-test
   - name: podman
     description: "Static podman image, allows to build other images"
     args:
