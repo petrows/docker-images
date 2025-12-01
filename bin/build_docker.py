@@ -184,6 +184,8 @@ def get_build_sh(name: str, push=False) -> str:
         out.append('(')
         out.append(f'cd {name}')
         build_args = []
+        build_args.append(['--progress', 'plain'])
+        build_args.append(['--network', 'host'])
         build_args.append(['--cache-from', config['repo']['cache']])
         build_args.append(['--cache-to', config['repo']['cache']])
         build_args.append(['--label', f'org.opencontainers.image.source="https://github.com/{config["repo"]["owner"]}"'])

@@ -8,6 +8,7 @@ RUN apk add --update --no-cache \
     bash \
     git \
     python3 \
-    py-pip
+    py3-pip \
+    py3-pyaml
 
 RUN ln -s /usr/local/bin/podman /usr/local/bin/docker

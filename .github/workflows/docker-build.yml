@@ -8,7 +8,7 @@ jobs:
     name: Detect docker images to build
     runs-on: self-hosted
     container:
-      image: ghcr.io/petrows/podman:5.7.0
+      image: ghcr.io/petrows/podman:5.7.0-1
       options: -u 0 --privileged
     outputs:
       images: ${{ steps.detect.outputs.images }}
@@ -17,12 +17,12 @@ jobs:
       - name: Detect new tags
         id: detect
         run: |
-          ./bin/build_docker.py --detect-tags >> "$GITHUB_OUTPUT"
+          ./bin/build_docker.py --detect-images >> "$GITHUB_OUTPUT"
   docker-build:
     name: Build
     runs-on: self-hosted
     container:
-      image: ghcr.io/petrows/podman:5.7.0
+      image: ghcr.io/petrows/podman:5.7.0-1
       options: -u 0 --privileged
       volumes:
         - /tmp/podman-storage:/var/lib/containers/storage
@@ -43,7 +43,7 @@ jobs:
     if: success() && github.ref == 'refs/heads/master'
     runs-on: self-hosted
     container:
-      image: ghcr.io/petrows/podman:5.7.0
+      image: ghcr.io/petrows/podman:5.7.0-1
       options: -u 0 --privileged
       volumes:
         - /tmp/podman-storage:/var/lib/containers/storage
