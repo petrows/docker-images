@@ -35,36 +35,21 @@ jobs:
         image: ${{ fromJSON(needs.docker-detect.outputs.images) }}
     steps:
       - uses: actions/checkout@v4
+      - name: Docker login
+        run: |
+          docker login ghcr.io -u petrows -p ${{ secrets.DOCKER_TOKEN }}
       - name: Build ${{ matrix.image }}
         env:
           GITHUB_TOKEN: ${{ secrets.DOCKER_TOKEN }}
         run: |
-          docker login ghcr.io -u petrows -p ${{ secrets.DOCKER_TOKEN }}
           echo "Build: ${{ matrix.image }}"
           ./bin/build_docker.py --build ${{ matrix.image }} | tee build.sh
           source build.sh
-  docker-deploy:
-    name: Deploy
-    if: success() && github.ref == 'refs/heads/master'
-    runs-on: self-hosted
-    container:
-      image: ghcr.io/petrows/podman:5.7.0-2
-      options: -u 0 --privileged
-      volumes:
-        - /tmp/podman-storage:/var/lib/containers/storage
-    needs:
-      - docker-detect
-      - docker-build
-    strategy:
-      matrix:
-        image: ${{ fromJSON(needs.docker-detect.outputs.images) }}
-    steps:
-      - uses: actions/checkout@v4
       - name: Deploy ${{ matrix.image }}
+        if: success() && github.ref == 'refs/heads/master'
         env:
           GITHUB_TOKEN: ${{ secrets.DOCKER_TOKEN }}
         run: |
-          docker login ghcr.io -u petrows -p ${{ secrets.DOCKER_TOKEN }}
           echo "Deploy: ${{ matrix.image }}"
           ./bin/build_docker.py --deploy ${{ matrix.image }} | tee deploy.sh
           source deploy.sh
