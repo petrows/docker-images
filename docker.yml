@@ -12,6 +12,8 @@ images:
     description: "Static github-linters image, contains various linters for GitHub Actions"
     tags:
       - v4
+      - v4-test-a
+      - v4-test-b
   - name: podman
     description: "Static podman image, allows to build other images"
     args:

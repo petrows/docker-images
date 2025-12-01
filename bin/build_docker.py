@@ -185,10 +185,14 @@ def get_build_sh(name: str, push=False) -> str:
         logging.info(f"No new tags detected for image '{name}'.")
         sys.exit(1)
 
-    for tag in tags:
-        full_name = image_full_name(name, tag)
-        out.append(f'echo "::group::{name}:{tag}"')
-        out.append(f'echo "Building image: {full_name}"')
+    out.append(f'echo "::group::{name}"')
+    if push:
+        for tag in tags:
+            full_name = image_full_name(name, tag)
+            out.append(f'echo "Deploying image: {full_name}"')
+            out.append(f'docker push {full_name}')
+    else:
+        out.append(f'echo "Building image: {name}"')
         out.append('(')
         out.append(f'cd {name}')
         build_args = []
@@ -200,13 +204,13 @@ def get_build_sh(name: str, push=False) -> str:
         build_args.append(['--label', f'org.opencontainers.image.description="{image.get("description", "")}"'])
         iso_time = datetime.now(timezone.utc).isoformat()
         build_args.append(['--label', f'org.opencontainers.image.created="{iso_time}"'])
-        build_args.append(['-t', full_name])
+        for tag in tags:
+            full_name = image_full_name(name, tag)
+            build_args.append(['-t', full_name])
         build_args.append(['-f', f'{name}.dockerfile'])
         out.append(f'docker build {" ".join([item for sublist in build_args for item in sublist])} .')
-        if push:
-            out.append(f'docker push {full_name}')
         out.append(')')
-        out.append('echo "::endgroup::"')
+    out.append('echo "::endgroup::"')
 
     print("\n".join(out))
 
