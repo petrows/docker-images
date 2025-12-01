@@ -71,35 +71,35 @@ def main():
 
 
 def exec(command: list[str]) -> bool:
-		command_base = os.path.basename(command[0])
-		p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    command_base = os.path.basename(command[0])
+    p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-		fl = fcntl.fcntl(p.stdout, fcntl.F_GETFL)
-		fcntl.fcntl(p.stdout, fcntl.F_SETFL, fl | os.O_NONBLOCK)
+    fl = fcntl.fcntl(p.stdout, fcntl.F_GETFL)
+    fcntl.fcntl(p.stdout, fcntl.F_SETFL, fl | os.O_NONBLOCK)
 
-		fl = fcntl.fcntl(p.stderr, fcntl.F_GETFL)
-		fcntl.fcntl(p.stderr, fcntl.F_SETFL, fl | os.O_NONBLOCK)
+    fl = fcntl.fcntl(p.stderr, fcntl.F_GETFL)
+    fcntl.fcntl(p.stderr, fcntl.F_SETFL, fl | os.O_NONBLOCK)
 
-		while None == p.poll():
-			try:
-				line = p.stdout.readline()
-				if line :
-					logging.debug(command_base + ": " + line.decode('utf-8').strip())
-			except OSError:
-				pass
+    while p.poll() is None:
+        try:
+            line = p.stdout.readline()
+            if line:
+                logging.debug(f"{command_base}: {line.decode('utf-8').strip()}")
+        except OSError:
+            pass
 
-			try:
-				line = p.stderr.readline()
-				if line :
-					logging.debug(command_base + "! " + line.decode('utf-8').strip())
-			except OSError:
-				pass
+        try:
+            line = p.stderr.readline()
+            if line:
+                logging.debug(f"{command_base}! {line.decode('utf-8').strip()}")
+        except OSError:
+            pass
 
-		p.wait()
-		if 0 != p.returncode:
-			logging.debug("Command '" + ' '.join(command) + "' return code " + "{0}".format(p.returncode))
+    p.wait()
+    if p.returncode != 0:
+        logging.debug(f"Command '{' '.join(command)}' return code {p.returncode}")
 
-		return 0 == p.returncode
+    return p.returncode == 0
 
 
 def read_config():

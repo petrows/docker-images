@@ -18,7 +18,7 @@ jobs:
         id: detect
         run: |
           docker login ghcr.io -u petrows -p ${{ secrets.DOCKER_TOKEN }}
-          ./bin/build_docker.py --detect-images >> "$GITHUB_OUTPUT"
+          ./bin/build_docker.py --detect-images | tee "$GITHUB_OUTPUT"
   docker-build:
     name: Build
     runs-on: self-hosted
