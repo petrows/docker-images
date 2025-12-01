@@ -17,6 +17,7 @@ jobs:
       - name: Detect new tags
         id: detect
         run: |
+          docker login ghcr.io -u petrows -p ${{ secrets.DOCKER_TOKEN }}
           ./bin/build_docker.py --detect-images >> "$GITHUB_OUTPUT"
   docker-build:
     name: Build
