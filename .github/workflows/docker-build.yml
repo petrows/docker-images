@@ -36,6 +36,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build ${{ matrix.image }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.DOCKER_TOKEN }}
         run: |
           docker login ghcr.io -u petrows -p ${{ secrets.DOCKER_TOKEN }}
           echo "Build: ${{ matrix.image }}"
@@ -59,6 +61,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Deploy ${{ matrix.image }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.DOCKER_TOKEN }}
         run: |
           docker login ghcr.io -u petrows -p ${{ secrets.DOCKER_TOKEN }}
           echo "Deploy: ${{ matrix.image }}"
