@@ -4,7 +4,8 @@
 repo:
   prefix: ghcr.io/petrows
   cache: ghcr.io/petrows/docker-images/cache
-  owner: petrows/docker-images
+  name: docker-images
+  owner: petrows
 
 images:
   - name: github-linters

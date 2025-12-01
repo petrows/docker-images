@@ -9,6 +9,7 @@ import logging
 import os
 import subprocess
 import sys
+import requests
 import yaml
 
 
@@ -53,7 +54,7 @@ def main():
       "--log-level",
       type=str,
       choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
-      default="DEBUG",
+      default="INFO",
       help="Set the logging level.",
     )
     args = argparser.parse_args()
@@ -133,11 +134,11 @@ def detect_images_tags(name: str):
 
     for image in config.get("images", []):
         if name == image['name']:
+            tags = ghcr_image_tags(f"{config['repo']['owner']}", name)
+            logging.debug(f"Existing tags for image {name}: {tags}")
             for tag in image.get("tags", []):
-                full_name = image_full_name(name, tag)
-                logging.debug("Check image existance: " + full_name)
-                if not exec(["docker", "manifest", "inspect", full_name]):
-                    logging.debug("New image detected: " + full_name)
+                if tag not in tags:
+                    logging.debug(f"New image detected: {name}:{tag}")
                     tags_detected.append(tag)
 
     return tags_detected
@@ -209,6 +210,41 @@ def get_build_sh(name: str, push=False) -> str:
 
     print("\n".join(out))
 
+
+def ghcr_image_tags(owner: str, image: str) -> bool:
+    """
+    Check if a GHCR image:tag exists, supporting public and private repos.
+
+    Args:
+        owner_repo: "owner/repo" format, e.g., "petrows/github-linters"
+        tag: image tag, e.g., "v3"
+
+    Returns:
+        True if tag exists, False otherwise.
+    """
+    github_token = os.environ.get("GITHUB_TOKEN")  # read token from env
+
+    headers = {
+        "Accept": "application/vnd.docker.distribution.manifest.v2+json"
+    }
+
+    # Token flow for public and private images
+    token_headers = {}
+    token_url = f"https://ghcr.io/token?scope=repository:{owner}/{image}:pull&service=ghcr.io"
+    token_resp = requests.get(token_url, auth=(owner, github_token), headers=token_headers)
+    token_resp.raise_for_status()
+    token = token_resp.json()["token"]
+    headers["Authorization"] = f"Bearer {token}"
+
+    manifest_url = f"https://ghcr.io/v2/{owner}/{image}/tags/list"
+    resp = requests.get(manifest_url, headers=headers)
+
+    if resp.status_code == 200:
+        return resp.json().get("tags", [])
+    elif resp.status_code == 404:
+        return []
+    else:
+        resp.raise_for_status()
 
 
 if __name__ == "__main__":
