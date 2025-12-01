@@ -3,13 +3,15 @@
 Build Docker images.
 """
 import argparse
+from datetime import datetime, timezone
 import fcntl
+import logging
 import os
 import subprocess
 import sys
 import yaml
-import logging
-from datetime import datetime, timezone
+
+
 
 config = {}
 logging.basicConfig(
@@ -131,12 +133,12 @@ def detect_images_tags(name: str):
 
     for image in config.get("images", []):
         if name == image['name']:
-          for tag in image.get("tags", []):
-            full_name = image_full_name(name, tag)
-            logging.debug("Check image existance: " + full_name)
-            if not exec(["docker", "manifest", "inspect", full_name]):
-                logging.debug("New image detected: " + full_name)
-                tags_detected.append(tag)
+            for tag in image.get("tags", []):
+                full_name = image_full_name(name, tag)
+                logging.debug("Check image existance: " + full_name)
+                if not exec(["docker", "manifest", "inspect", full_name]):
+                    logging.debug("New image detected: " + full_name)
+                    tags_detected.append(tag)
 
     return tags_detected
 
