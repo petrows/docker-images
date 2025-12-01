@@ -1,3 +1,5 @@
+# Own scripts
+requests
 # Linters for Python
 flake8
 pylint

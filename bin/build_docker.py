@@ -158,9 +158,9 @@ def detect_images():
         if tags:
             images_detected.append(name)
 
-    if not images_detected:
-        print("::error::No new images detected for build.")
-        sys.exit(1)
+    # if not images_detected:
+    #     print("::error::No new images detected for build.")
+    #     sys.exit(1)
 
     print(f'images={images_detected}')
 

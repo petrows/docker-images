@@ -11,10 +11,10 @@ images:
   - name: github-linters
     description: "Static github-linters image, contains various linters for GitHub Actions"
     tags:
-      - v3-test
+      - v3
   - name: podman
     description: "Static podman image, allows to build other images"
     args:
       PODMAN_VERSION: 5.7.0
     tags:
-      - 5.7.0-1
+      - 5.7.0-2
