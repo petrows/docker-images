@@ -8,7 +8,7 @@ jobs:
     name: Run Python Lint
     runs-on: self-hosted
     container:
-      image: ghcr.io/petrows/github-linters:v3
+      image: ghcr.io/petrows/github-linters:v4
       # options: -u 2025:2025
     steps:
       - uses: actions/checkout@v4
