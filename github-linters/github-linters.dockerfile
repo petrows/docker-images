@@ -31,6 +31,7 @@ COPY requirements.* /opt/venv/
 
 # Linters for Python and other software
 RUN pip install --upgrade pip \
+    && pip install --no-cache-dir -U pipx \
     && pip install --no-cache-dir -r /opt/venv/requirements.txt
 
 # Display current installed packages

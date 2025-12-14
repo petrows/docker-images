@@ -8,17 +8,20 @@ repo:
   owner: petrows
 
 images:
-  - name: platformio
-    description: "Image to build platformio projects, contains basic platforms"
-    tags:
-      - v3
+
   - name: github-linters
     description: "Static github-linters image, contains various linters for GitHub Actions"
     tags:
-      - v5
+      - v6
+
   - name: podman
     description: "Static podman image, allows to build other images"
     args:
       PODMAN_VERSION: 5.7.0
     tags:
       - 5.7.0-3
+
+  - name: platformio
+    description: "Image to build platformio projects, contains basic platforms"
+    tags:
+      - v3
