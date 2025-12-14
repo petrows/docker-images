@@ -25,3 +25,8 @@ images:
     description: "Image to build platformio projects, contains basic platforms"
     tags:
       - v4
+
+  - name: latex
+    description: "Image to build latex documents"
+    tags:
+      - v1
