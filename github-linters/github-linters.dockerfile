@@ -6,6 +6,7 @@ LABEL org.opencontainers.image.description="Set of generic linters for common Gi
 
 RUN apt-get update && apt-get install -qy --no-install-recommends \
     bash \
+    ssh \
     git \
     curl \
     # Python packages
@@ -15,6 +16,7 @@ RUN apt-get update && apt-get install -qy --no-install-recommends \
     # NodeJS
     nodejs \
     npm \
+    zstd \
     && apt-get clean -q && rm -rf /var/lib/apt/lists/*
 
 # Activate venv
