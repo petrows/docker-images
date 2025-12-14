@@ -24,4 +24,4 @@ images:
   - name: platformio
     description: "Image to build platformio projects, contains basic platforms"
     tags:
-      - v3
+      - v4
