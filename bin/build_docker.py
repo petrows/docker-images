@@ -200,10 +200,10 @@ def get_build_sh(name: str, push=False) -> str:
         build_args.append(['--network', 'host'])
         build_args.append(['--cache-from', config['repo']['cache']])
         build_args.append(['--cache-to', config['repo']['cache']])
-        build_args.append(['--label', f'org.opencontainers.image.source="https://github.com/{config["repo"]["owner"]}"'])
-        build_args.append(['--label', f'org.opencontainers.image.description="{image.get("description", "")}"'])
+        build_args.append(['--label', f'"org.opencontainers.image.source=https://github.com/{config["repo"]["owner"]}/{config["repo"]["name"]}"'])
+        build_args.append(['--label', f'"org.opencontainers.image.description={image.get("description", "")}"'])
         iso_time = datetime.now(timezone.utc).isoformat()
-        build_args.append(['--label', f'org.opencontainers.image.created="{iso_time}"'])
+        build_args.append(['--label', f'"org.opencontainers.image.created={iso_time}"'])
         for tag in tags:
             full_name = image_full_name(name, tag)
             build_args.append(['-t', full_name])
