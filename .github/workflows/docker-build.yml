@@ -28,7 +28,7 @@ jobs:
       image: ghcr.io/petrows/podman:5.7.0-2
       options: -u 0 --privileged
       volumes:
-        - /tmp/podman-storage:/var/lib/containers/storage
+        - /home/github/tmp/podman-storage:/var/lib/containers/storage
     needs: docker-detect
     strategy:
       matrix:
