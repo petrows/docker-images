@@ -8,6 +8,10 @@ repo:
   owner: petrows
 
 images:
+  - name: platformio
+    description: "Image to build platformio projects, contains basic platforms"
+    tags:
+      - v2
   - name: github-linters
     description: "Static github-linters image, contains various linters for GitHub Actions"
     tags:

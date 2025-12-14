@@ -19,6 +19,9 @@ RUN apt-get update && apt-get install -qy --no-install-recommends \
     zstd \
     && apt-get clean -q && rm -rf /var/lib/apt/lists/*
 
+ENV HOME=/github/home
+RUN mkdir -p -m 777 $HOME
+
 # Activate venv
 RUN python3 -m venv /opt/venv
 ENV PATH="/opt/venv/bin:/opt/bin:$PATH"
